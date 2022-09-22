@@ -6,7 +6,7 @@ const walkers = getWalkers()
 const cities = getCities()
 
 //function to filter walker cities array and return an array of cities serviced by the chosen(parameter) walker
-const filterWalkerCitiesByWalker = (walker) => {
+export const filterWalkerCitiesByWalker = (walker) => {
     // create empty array to store  assignment objects
     let cityAssignments = []
     // Iterate the array value of walkerCities
@@ -92,9 +92,6 @@ document.addEventListener(
                 }
             }
         }
-        /*Then, define a function that take in the array of matching objects, and use the cityId 
-        property on each one to find the matching city name. It should return a string containing 
-        all the city names. */
     }
 )
 

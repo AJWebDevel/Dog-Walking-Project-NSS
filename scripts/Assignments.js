@@ -1,13 +1,16 @@
-import { getPets, getWalkers } from "./database.js"
+import { getPets, getWalkers, getCities } from "./database.js"
+import { filterWalkerCitiesByWalker } from "./Walkers.js"
 
-// Get copy of state for use in this module
+// Get copy of arrays in database
 const pets = getPets()
 const walkers = getWalkers()
+const cityList = getCities()
 
 
-// Function whose responsibility is to find the walker assigned to a pet
+
+// Function to find the walker assigned to a pet
 const findWalker = (pet, walkers) => {
-    let petWalker = walkers
+    let petWalker = null
 
     for (const walker of walkers) {
         if (walker.id === pet.walkerId) {
@@ -19,23 +22,32 @@ const findWalker = (pet, walkers) => {
 }
 
 
-
+// function to display current assignments (whom is walking whom, in what city)
 export const Assignments = () => {
-    let assignmentHTML = ""
-    assignmentHTML = `<ul>`
-
+    //declare variable string to start the list
+    let assignmentHTML = `<ul>`
+    //iterate through pets(array of pets) to select a pet 
     for (const currentPet of pets) {
+        //findWalker returns the pet walker obj that matches the current pet's walkerId. Stored in variable to be used as argument later
         const currentPetWalker = findWalker(currentPet, walkers)
-        assignmentHTML += `
+        //variable represents the cities a walker services. it takes the walker as an argument
+        const petWalkerCities = filterWalkerCitiesByWalker(currentPetWalker.id)
+        //for loop that iterates through cities stored in petWalkerCities
+        for (const chosenCity of petWalkerCities) {
+            for (const city of cityList) {
+                if (city.id === chosenCity.cityId) {
+                    assignmentHTML += `
             <li>
                 ${currentPet.name} is being walked by
-                ${currentPetWalker.name} in ${currentPetWalker.city}
+                ${currentPetWalker.name} in ${city.name}
             </li>
-        `
+       `
+                }
+            }
+        }
+
+        assignmentHTML += `</ul>`
+
     }
-
-    assignmentHTML += `</ul>`
-
     return assignmentHTML
 }
-
